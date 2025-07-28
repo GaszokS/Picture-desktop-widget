@@ -7,6 +7,8 @@ import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/
 
 export default class PictureDesktopWidgetPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
+        this.settings = this.getSettings();
+
         const page = new Adw.PreferencesPage();
         const group = new Adw.PreferencesGroup();
         group.set_title(_("Settings"));
@@ -29,6 +31,10 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
 
         page.add(group);
         window.add(page);
+
+        window.connect('close-request', () => {
+            this.settings = null;
+        });
     }
 
     _createSpinRow(title, lower, upper, stepIncrement, pageIncrement, settingName) {
@@ -39,14 +45,14 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
                 upper: upper,
                 step_increment: stepIncrement,
                 page_increment: pageIncrement,
-                value: this.getSettings().get_int(settingName),
+                value: this.settings.get_int(settingName),
             }),
         });
 
         row.connect('notify::value', () => {
             const newValue = row.get_value();
-            if (newValue !== this.getSettings().get_int(settingName)) {
-                this.getSettings().set_int(settingName, newValue);
+            if (newValue !== this.settings.get_int(settingName)) {
+                this.settings.set_int(settingName, newValue);
             }
         });
 
@@ -63,7 +69,7 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
             upper: upper,
             step_increment: stepIncrement,
             page_increment: pageIncrement,
-            value: this.getSettings().get_int(settingName),
+            value: this.settings.get_int(settingName),
         });
 
         const scale = new Gtk.Scale({
@@ -79,8 +85,8 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
 
         scale.connect('value-changed', () => {
             const newValue = scale.get_value();
-            if (newValue !== this.getSettings().get_int(settingName)) {
-                this.getSettings().set_int(settingName, newValue);
+            if (newValue !== this.settings.get_int(settingName)) {
+                this.settings.set_int(settingName, newValue);
             }
         });
 
@@ -116,7 +122,7 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
             dialog.connect('response', (dialog, response) => {
                 if (response === Gtk.ResponseType.OK) {
                     const folderPath = dialog.get_file().get_path();
-                    this.getSettings().set_string(settingName, folderPath);
+                    this.settings.set_string(settingName, folderPath);
                     row.set_subtitle(folderPath);
                 }
                 dialog.destroy();
