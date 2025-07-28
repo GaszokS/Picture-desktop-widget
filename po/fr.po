@@ -1,0 +1,65 @@
+#
+#  <>, YEAR-2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-28 15:50+0200\n"
+"PO-Revision-Date: 2025-07-28 15:55+0200\n"
+"Last-Translator:  <>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-DL-Lang: fr\n"
+"X-DL-Module: \n"
+"X-DL-Branch: \n"
+"X-DL-Domain: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Gtranslator 48.0\n"
+
+#: prefs.js:14
+msgid "Settings"
+msgstr "Paramètres"
+
+#: prefs.js:16
+msgid "Widget Size"
+msgstr "Taille du Widget"
+
+#: prefs.js:17
+msgid "X Position"
+msgstr "Position X"
+
+#: prefs.js:18
+msgid "Y Position"
+msgstr "Position Y"
+
+#: prefs.js:19
+msgid "Images Path"
+msgstr "Chemin des images"
+
+#: prefs.js:20
+msgid "Image Update Interval (seconds)"
+msgstr "Intervale de mise à jour des images (secondes)"
+
+#: prefs.js:21
+msgid "Widget Corner Radius (%)"
+msgstr "Rayon des coins du Widget (%)"
+
+#: prefs.js:100
+msgid "Choose Folder"
+msgstr "Choisissez un dossier"
+
+#: prefs.js:107
+msgid "Select Image Folder"
+msgstr "Selectionnez le dossier contenant les images"
+
+#: prefs.js:113
+msgid "_Cancel"
+msgstr "_Annuler"
+
+#: prefs.js:114
+msgid "_Open"
+msgstr "_Ouvrir"

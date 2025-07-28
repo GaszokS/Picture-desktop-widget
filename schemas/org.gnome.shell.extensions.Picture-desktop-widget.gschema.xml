@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.Picture-desktop-widget" path="/org/gnome/shell/extensions/Picture-desktop-widget/">
+    <key name="widget-size" type="i">
+      <default>200</default>
+      <summary>Size of the image widget in pixels</summary>
+      <description>Controls the width and height of the desktop image widget.</description>
+    </key>
+
+    <key name="widget-position-x" type="i">
+      <default>100</default>
+      <summary>X position of the image widget</summary>
+      <description>Sets the horizontal position of the desktop image widget.</description>
+    </key>
+
+    <key name="widget-position-y" type="i">
+      <default>100</default>
+      <summary>Y position of the image widget</summary>
+      <description>Sets the vertical position of the desktop image widget.</description>
+    </key>
+
+    <key name="image-path" type="s">
+      <default>''</default>
+      <summary>Path to the image file</summary>
+      <description>Specifies the file path of the image to be displayed on the desktop.</description>
+    </key>
+
+    <key name="widget-timeout" type="i">
+      <default>60</default>
+      <summary>Timeout for image updates</summary>
+      <description>Defines the interval in seconds for updating the image displayed on the desktop.</description>
+    </key>
+
+    <key name="widget-corner-radius" type="i">
+      <default>20</default>
+      <summary>Corner radius of the image widget</summary>
+      <description>Sets the corner radius for the desktop image widget, giving it rounded corners.</description>
+    </key>
+  </schema>
+</schemalist>
