@@ -2,13 +2,12 @@
   "name": "Picture desktop widget",
   "description": "A widget that allows you to display pictures on your desktop",
   "uuid": "Picture-desktop-widget@GaszokS.github.com",
+  "settings-schema": "org.gnome.shell.extensions.Picture-desktop-widget",
+  "gettext-domain": "Picture-desktop-widget@GaszokS.github.com",
+  "original-authors": "GaszokS",
+  "url": "https://github.com/GaszokS/Picture-desktop-widget",
   "shell-version": [
     "46"
   ],
-  "settings-schema": "org.gnome.shell.extensions.Picture-desktop-widget",
-  "gettext-domain": "Picture-desktop-widget@GaszokS.github.com",
-  "original-authors": [
-        "GaszokS"
-    ],
-    "version": 1
+  "version": 1
 }
