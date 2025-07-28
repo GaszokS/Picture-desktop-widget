@@ -13,6 +13,7 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
         const group = new Adw.PreferencesGroup();
         group.set_title(_("Settings"));
 
+        // Create preference rows
         let sizeRow = this._createSpinRow(_("Widget Size"), 50, 2000, 1, 10, "widget-size");
         let xPositionRow = this._createSpinRow(_("X Position"), 0, 100000, 5, 50, "widget-position-x");
         let yPositionRow = this._createSpinRow(_("Y Position"), 0, 100000, 5, 50, "widget-position-y");
@@ -20,6 +21,7 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
         let timeoutRow = this._createSpinRow(_("Image Update Interval (seconds)"), 5, 100000, 5, 60, "widget-timeout");
         let cornerRadiusRow = this._createSliderRow(_("Widget Corner Radius (%)"), 0, 100, 1, 10, "widget-corner-radius");
 
+        // Add rows to the group
         group.add(sizeRow);
         group.add(xPositionRow);
         group.add(yPositionRow);

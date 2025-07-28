@@ -11,19 +11,17 @@ let _timeoutId;
 
 export default class Picture_desktop_widget_extension extends Extension {
     enable() {
-
-        // Load GSettings
         settings = this.getSettings();
 
-        // Create a simple widget
+        // Create widget
         ImageWidget = new St.Widget();
         this.updateWidgetSize();
         this.updateWidgetPosition();
         this.updateImagePath();
         
-        Main.layoutManager._backgroundGroup.add_child(ImageWidget);
+        Main.layoutManager._backgroundGroup.add_child(ImageWidget); // Add widget to the background group
 
-        // Start repeating task every 5 seconds
+        // Start repeating task
         this.updateTimeout();
 
         // Listen for changes
@@ -90,12 +88,18 @@ export default class Picture_desktop_widget_extension extends Extension {
             );
 
             // Collect all file names into an array
-            const fileNames = [];
+            let fileNames = [];
             let info;
             while ((info = enumerator.next_file(null)) !== null) {
                 fileNames.push(info.get_name());
             }
             enumerator.close(null);
+
+            // Filter for image files
+            const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+            fileNames = fileNames.filter(fileName =>
+                imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext))
+            );
 
             if (fileNames.length > 0) {
                 // Pick random one
