@@ -5,14 +5,11 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 let ImageWidget;
-let settings;
 let imagePath;
 let _timeoutId;
 
 export default class Picture_desktop_widget_extension extends Extension {
     enable() {
-        settings = this.getSettings();
-
         // Create widget
         ImageWidget = new St.Widget();
         this.updateWidgetSize();
@@ -29,12 +26,12 @@ export default class Picture_desktop_widget_extension extends Extension {
 
         // Connect signals and store their IDs
         this._settingsChangedIds.push(
-            settings.connect('changed::widget-size', this.updateWidgetSize),
-            settings.connect('changed::widget-position-x', this.updateWidgetPosition),
-            settings.connect('changed::widget-position-y', this.updateWidgetPosition),
-            settings.connect('changed::image-path', this.updateImagePath),
-            settings.connect('changed::widget-timeout', this.updateTimeout),
-            settings.connect('changed::widget-corner-radius', this.updateWidget)
+            this.getSettings().connect('changed::widget-size', this.updateWidgetSize),
+            this.getSettings().connect('changed::widget-position-x', this.updateWidgetPosition),
+            this.getSettings().connect('changed::widget-position-y', this.updateWidgetPosition),
+            this.getSettings().connect('changed::image-path', this.updateImagePath),
+            this.getSettings().connect('changed::widget-timeout', this.updateTimeout),
+            this.getSettings().connect('changed::widget-corner-radius', this.updateWidget)
         );
     }
 
@@ -42,8 +39,8 @@ export default class Picture_desktop_widget_extension extends Extension {
         ImageWidget?.destroy();
         ImageWidget = null;
 
-        if (settings && this._settingsChangedIds) {
-            this._settingsChangedIds.forEach(id => settings.disconnect(id));
+        if (this._settingsChangedIds) {
+            this._settingsChangedIds.forEach(id => this.getSettings().disconnect(id));
             this._settingsChangedIds = [];
         }
 
@@ -54,14 +51,14 @@ export default class Picture_desktop_widget_extension extends Extension {
     }
 
     updateWidgetSize = () => {
-        let newSize = settings.get_int('widget-size');
+        let newSize = this.getSettings().get_int('widget-size');
         ImageWidget.set_width(newSize);
         ImageWidget.set_height(newSize);
     };
 
     updateWidgetPosition = () => {
-        let newX = settings.get_int('widget-position-x');
-        let newY = settings.get_int('widget-position-y');
+        let newX = this.getSettings().get_int('widget-position-x');
+        let newY = this.getSettings().get_int('widget-position-y');
         ImageWidget.set_position(newX, newY);
     };
 
@@ -69,17 +66,17 @@ export default class Picture_desktop_widget_extension extends Extension {
         if (_timeoutId) {
             GLib.source_remove(_timeoutId);
         }
-        _timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, settings.get_int('widget-timeout'), () => {
+        _timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, this.getSettings().get_int('widget-timeout'), () => {
             this.updateImagePath();
             return true;
         });
     };
 
     updateImagePath = () => {
-        if (settings.get_string('image-path') === '') {
+        if (this.getSettings().get_string('image-path') === '') {
             imagePath = `${this.dir.get_path()}/image.JPG`;
         } else {
-            const folderPath = settings.get_string('image-path');
+            const folderPath = this.getSettings().get_string('image-path');
             const folder = Gio.File.new_for_path(folderPath);
             const enumerator = folder.enumerate_children(
                 'standard::name',
@@ -114,8 +111,8 @@ export default class Picture_desktop_widget_extension extends Extension {
     };
 
     updateWidget = () => {
-        let size = settings.get_int('widget-size');
-        let radius_percent = settings.get_int('widget-corner-radius')/ 100;
+        let size = this.getSettings().get_int('widget-size');
+        let radius_percent = this.getSettings().get_int('widget-corner-radius')/ 100;
         ImageWidget.set_style(`
             background-image: url("file://${imagePath}");
             background-size: cover;

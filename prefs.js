@@ -7,8 +7,6 @@ import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/
 
 export default class PictureDesktopWidgetPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
-        this._settings = this.getSettings();
-
         const page = new Adw.PreferencesPage();
         const group = new Adw.PreferencesGroup();
         group.set_title(_("Settings"));
@@ -41,14 +39,14 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
                 upper: upper,
                 step_increment: stepIncrement,
                 page_increment: pageIncrement,
-                value: this._settings.get_int(settingName),
+                value: this.getSettings().get_int(settingName),
             }),
         });
 
         row.connect('notify::value', () => {
             const newValue = row.get_value();
-            if (newValue !== this._settings.get_int(settingName)) {
-                this._settings.set_int(settingName, newValue);
+            if (newValue !== this.getSettings().get_int(settingName)) {
+                this.getSettings().set_int(settingName, newValue);
             }
         });
 
@@ -65,7 +63,7 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
             upper: upper,
             step_increment: stepIncrement,
             page_increment: pageIncrement,
-            value: this._settings.get_int(settingName),
+            value: this.getSettings().get_int(settingName),
         });
 
         const scale = new Gtk.Scale({
@@ -81,8 +79,8 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
 
         scale.connect('value-changed', () => {
             const newValue = scale.get_value();
-            if (newValue !== this._settings.get_int(settingName)) {
-                this._settings.set_int(settingName, newValue);
+            if (newValue !== this.getSettings().get_int(settingName)) {
+                this.getSettings().set_int(settingName, newValue);
             }
         });
 
@@ -118,7 +116,7 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
             dialog.connect('response', (dialog, response) => {
                 if (response === Gtk.ResponseType.OK) {
                     const folderPath = dialog.get_file().get_path();
-                    this._settings.set_string(settingName, folderPath);
+                    this.getSettings().set_string(settingName, folderPath);
                     row.set_subtitle(folderPath);
                 }
                 dialog.destroy();
