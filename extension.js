@@ -2,7 +2,7 @@ import St from 'gi://St';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import { Extension, gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 let ImageWidget;
 let imagePath;
@@ -77,7 +77,7 @@ export default class Picture_desktop_widget_extension extends Extension {
 
     updateImagePath = () => {
         if (this.settings.get_string('image-path') === '') {
-            imagePath = `${this.dir.get_path()}/image.JPG`;
+            imagePath = '';
         } else {
             const folderPath = this.settings.get_string('image-path');
             const folder = Gio.File.new_for_path(folderPath);
@@ -116,10 +116,33 @@ export default class Picture_desktop_widget_extension extends Extension {
     updateWidget = () => {
         let size = this.settings.get_int('widget-size');
         let radius_percent = this.settings.get_int('widget-corner-radius')/ 100;
-        ImageWidget.set_style(`
-            background-image: url("file://${imagePath}");
-            background-size: cover;
-            border-radius: ${radius_percent * size}px;
-        `);
+        if (imagePath === '') {
+            ImageWidget.set_style(`
+                background-color: rgba(0, 0, 0, 1);
+                border-radius: ${radius_percent * size}px;
+            `);
+
+            // Remove previous label if any
+            if (ImageWidget._label) {
+                ImageWidget._label.destroy();
+                ImageWidget._label = null;
+            }
+
+            // Add a label to the widget
+            let label = new St.Label({ text: _("Add a path\n to folder with images")});
+            label.set_style(`
+                color: white;
+                font-size: ${size / 10}px;
+                text-align: center;
+            `);
+            ImageWidget.add_child(label);
+            ImageWidget._label = label;
+        } else {
+            ImageWidget.set_style(`
+                background-image: url("file://${imagePath}");
+                background-size: cover;
+                border-radius: ${radius_percent * size}px;
+            `);
+        }
     }
 }
