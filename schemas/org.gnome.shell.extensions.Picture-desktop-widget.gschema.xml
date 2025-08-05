@@ -36,5 +36,16 @@
       <summary>Corner radius of the image widget</summary>
       <description>Sets the corner radius for the desktop image widget, giving it rounded corners.</description>
     </key>
+
+    <key name="time-last-update" type="i">
+      <default>0</default>
+      <summary>Time of last update of the image</summary>
+    </key>
+
+    <key name="current-image-path" type="s">
+      <default>''</default>
+      <summary>Path to the currently displayed image</summary>
+      <description>Stores the path of the image currently being displayed on the desktop.</description>
+    </key>
   </schema>
 </schemalist>
