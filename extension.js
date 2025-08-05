@@ -12,11 +12,20 @@ export default class Picture_desktop_widget_extension extends Extension {
     enable() {
         this.settings = this.getSettings();
 
+        // Check if the timeout is passed
+        let lastUpdateTime = this.settings.get_int("time-last-update")
+        let currentTime = Math.floor(Date.now() / 1000);
+        let passedTime = currentTime - lastUpdateTime;
+
         // Create widget
         ImageWidget = new St.Widget();
         this.updateWidgetSize();
         this.updateWidgetPosition();
-        this.updateImagePath();
+        if (lastUpdateTime === 0 || passedTime >= this.settings.get_int('widget-timeout')) {
+            this.updateImagePath();
+        } else {
+            this.updateWidget();
+        }
         
         Main.layoutManager._backgroundGroup.add_child(ImageWidget); // Add widget to the background group
 
@@ -66,13 +75,32 @@ export default class Picture_desktop_widget_extension extends Extension {
     };
 
     updateTimeout = () => {
+        // Check if the timeout is passed
+        let nextTimeout;
+        let lastUpdateTime = this.settings.get_int("time-last-update")
+        let currentTime = Math.floor(Date.now() / 1000);
+        let passedTime = currentTime - lastUpdateTime;
+        console.log(`Last update time: ${lastUpdateTime}, Current time: ${currentTime}, Passed time: ${passedTime}`);
+
+        if (lastUpdateTime === 0 || passedTime >= this.settings.get_int('widget-timeout')) {
+            nextTimeout = this.settings.get_int('widget-timeout');
+        } else {
+            nextTimeout = this.settings.get_int('widget-timeout') - passedTime;
+        }
+
+        // Clear previous timeout if it exists
         if (_timeoutId) {
             GLib.source_remove(_timeoutId);
         }
-        _timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, this.settings.get_int('widget-timeout'), () => {
+
+        // Set a new timeout
+        _timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, nextTimeout, () => {
             this.updateImagePath();
             return true;
         });
+
+        // Update the last update time in settings
+        this.settings.set_int("time-last-update", Math.floor(Date.now() / 1000));
     };
 
     updateImagePath = () => {
@@ -110,23 +138,26 @@ export default class Picture_desktop_widget_extension extends Extension {
                 log('No files found');
             }
         }
+        this.settings.set_string('current-image-path', imagePath);
         this.updateWidget();
     };
 
     updateWidget = () => {
         let size = this.settings.get_int('widget-size');
         let radius_percent = this.settings.get_int('widget-corner-radius')/ 100;
+        imagePath = this.settings.get_string('current-image-path');
+        
+        // Remove previous label if any
+        if (ImageWidget._label) {
+            ImageWidget._label.destroy();
+            ImageWidget._label = null;
+        }
+
         if (imagePath === '') {
             ImageWidget.set_style(`
                 background-color: rgba(0, 0, 0, 1);
                 border-radius: ${radius_percent * size}px;
             `);
-
-            // Remove previous label if any
-            if (ImageWidget._label) {
-                ImageWidget._label.destroy();
-                ImageWidget._label = null;
-            }
 
             // Add a label to the widget
             let label = new St.Label({ text: _("Add a path\n to folder with images")});
@@ -138,6 +169,7 @@ export default class Picture_desktop_widget_extension extends Extension {
             ImageWidget.add_child(label);
             ImageWidget._label = label;
         } else {
+
             ImageWidget.set_style(`
                 background-image: url("file://${imagePath}");
                 background-size: cover;
