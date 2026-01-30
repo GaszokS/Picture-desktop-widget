@@ -6,7 +6,7 @@
   "original-authors": "GaszokS",
   "settings-schema": "org.gnome.shell.extensions.Picture-desktop-widget",
   "shell-version": [
-    "46"
+    "46", "47", "48", "49"
   ],
   "url": "https://github.com/GaszokS/Picture-desktop-widget",
   "uuid": "Picture-desktop-widget@GaszokS.github.com",
