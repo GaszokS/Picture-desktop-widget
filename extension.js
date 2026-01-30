@@ -121,11 +121,32 @@ export default class Picture_desktop_widget_extension extends Extension {
                 null
             );
 
-            // Collect all file names into an array
+            // Collect all file names
             let fileNames = [];
             let info;
             while ((info = enumerator.next_file(null)) !== null) {
-                fileNames.push(info.get_name());
+                const fileName = info.get_name();
+                const filePath = folder.get_child(fileName);
+                
+                // Include files from subdirectories
+                if (info.get_file_type() === Gio.FileType.DIRECTORY) {
+                    try {
+                        const subEnumerator = filePath.enumerate_children(
+                            'standard::name',
+                            Gio.FileQueryInfoFlags.NONE,
+                            null
+                        );
+                        let subInfo;
+                        while ((subInfo = subEnumerator.next_file(null)) !== null) {
+                            fileNames.push(`${fileName}/${subInfo.get_name()}`);
+                        }
+                        subEnumerator.close(null);
+                    } catch (e) {
+                        log(`Error reading subdirectory: ${e}`);
+                    }
+                } else {
+                    fileNames.push(fileName);
+                }
             }
             enumerator.close(null);
 
