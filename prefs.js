@@ -20,6 +20,7 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
         let imagePathRow = this._createFolderChooserRow(_("Images Path"), "image-path", page);
         let timeoutRow = this._createSpinRow(_("Image Update Interval (seconds)"), 5, 100000, 5, 60, "widget-timeout");
         let cornerRadiusRow = this._createSliderRow(_("Widget Corner Radius (%)"), 0, 100, 1, 10, "widget-corner-radius");
+        let aspectRatioRow = this._createSliderRow(_("Widget Aspect Ratio (Width/Height)"), 0.25, 4, 0.01, 0.1, "widget-aspect-ratio", 'double');
 
         // Add rows to the group
         group.add(sizeRow);
@@ -28,6 +29,7 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
         group.add(imagePathRow);
         group.add(timeoutRow);
         group.add(cornerRadiusRow);
+        group.add(aspectRatioRow);
 
         page.add(group);
         window.add(page);
@@ -59,7 +61,24 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
         return row;
     }
 
-    _createSliderRow(title, lower, upper, stepIncrement, pageIncrement, settingName) {
+    _createSliderRow(title, lower, upper, stepIncrement, pageIncrement, settingName, settingType = 'int') {
+        // Parameter of slider
+        let digits;
+        if (stepIncrement < 1) {
+            digits = Math.ceil(-Math.log10(stepIncrement));
+        } else {
+            digits = 0;
+        }
+
+        let value;
+        if (settingType === 'int') {
+            value = this.settings.get_int(settingName);
+        } else if (settingType === 'double') {
+            value = this.settings.get_double(settingName);
+        } else {
+            throw new Error("Unsupported setting type for slider");
+        }
+
         const row = new Adw.ActionRow({
             title: title,
         });
@@ -69,13 +88,13 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
             upper: upper,
             step_increment: stepIncrement,
             page_increment: pageIncrement,
-            value: this.settings.get_int(settingName),
+            value: value,
         });
 
         const scale = new Gtk.Scale({
             orientation: Gtk.Orientation.HORIZONTAL,
             adjustment: adjustment,
-            digits: 0,
+            digits: digits,
             hexpand: true,
             valign: Gtk.Align.CENTER,
         });
@@ -86,7 +105,11 @@ export default class PictureDesktopWidgetPreferences extends ExtensionPreference
         scale.connect('value-changed', () => {
             const newValue = scale.get_value();
             if (newValue !== this.settings.get_int(settingName)) {
-                this.settings.set_int(settingName, newValue);
+                if (settingType === 'int') {
+                    this.settings.set_int(settingName, newValue);
+                } else if (settingType === 'double') {
+                    this.settings.set_double(settingName, newValue);
+                }
             }
         });
 

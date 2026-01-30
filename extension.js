@@ -38,6 +38,7 @@ export default class Picture_desktop_widget_extension extends Extension {
         // Connect signals and store their IDs
         this._settingsChangedIds.push(
             this.settings.connect('changed::widget-size', this.updateWidgetSize),
+            this.settings.connect('changed::widget-aspect-ratio', this.updateWidgetSize),
             this.settings.connect('changed::widget-position-x', this.updateWidgetPosition),
             this.settings.connect('changed::widget-position-y', this.updateWidgetPosition),
             this.settings.connect('changed::image-path', this.updateImagePath),
@@ -64,8 +65,13 @@ export default class Picture_desktop_widget_extension extends Extension {
 
     updateWidgetSize = () => {
         let newSize = this.settings.get_int('widget-size');
-        ImageWidget.set_width(newSize);
-        ImageWidget.set_height(newSize);
+        let newAspectRatio = this.settings.get_double('widget-aspect-ratio');
+        let newWidth = newSize * Math.sqrt(newAspectRatio);
+        let newHeight = newSize / Math.sqrt(newAspectRatio);
+        ImageWidget.set_width(newWidth);
+        ImageWidget.set_height(newHeight);
+
+        this.updateWidget();
     };
 
     updateWidgetPosition = () => {
@@ -143,7 +149,15 @@ export default class Picture_desktop_widget_extension extends Extension {
     };
 
     updateWidget = () => {
-        let size = this.settings.get_int('widget-size');
+        let aspect_ratio = this.settings.get_double('widget-aspect-ratio');
+
+        let size;
+        if (aspect_ratio <= 1) {
+            size = this.settings.get_int('widget-size') * Math.sqrt(aspect_ratio);
+        } else {
+            size = this.settings.get_int('widget-size') / Math.sqrt(aspect_ratio);
+        }
+
         let radius_percent = this.settings.get_int('widget-corner-radius')/ 100;
         imagePath = this.settings.get_string('current-image-path');
         
@@ -156,7 +170,7 @@ export default class Picture_desktop_widget_extension extends Extension {
         if (imagePath === '') {
             ImageWidget.set_style(`
                 background-color: rgba(0, 0, 0, 1);
-                border-radius: ${radius_percent * size}px;
+                border-radius: ${radius_percent * size/2}px;
             `);
 
             // Add a label to the widget
@@ -173,7 +187,7 @@ export default class Picture_desktop_widget_extension extends Extension {
             ImageWidget.set_style(`
                 background-image: url("file://${imagePath}");
                 background-size: cover;
-                border-radius: ${radius_percent * size}px;
+                border-radius: ${radius_percent * size/2}px;
             `);
         }
     }

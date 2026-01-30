@@ -7,6 +7,12 @@
       <description>Controls the width and height of the desktop image widget.</description>
     </key>
 
+    <key name="widget-aspect-ratio" type="d">
+      <default>1.0</default>
+      <summary>Aspect ratio of the image widget</summary>
+      <description>Defines the aspect ratio (width to height) of the desktop image widget.</description>
+    </key>
+
     <key name="widget-position-x" type="i">
       <default>100</default>
       <summary>X position of the image widget</summary>
