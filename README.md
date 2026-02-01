@@ -6,6 +6,8 @@ The widget can be resized, moved and the corner radius can be changed. The timeo
 
 ![Gnome desktop with a widget showing an image on the top left of the screen](/docs/ExempleScreenshot.png)
 
+The extension can be found [here](https://extensions.gnome.org/extension/8388/picture-desktop-widget/)
+
 ## Find a bug or you have a suggestion ?
 Don't hesitate to report any issue you found or any suggestion you have to make in order to improve the extension.
 
