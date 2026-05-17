@@ -1,57 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
   <schema id="org.gnome.shell.extensions.Picture-desktop-widget" path="/org/gnome/shell/extensions/Picture-desktop-widget/">
-    <key name="widget-size" type="i">
-      <default>200</default>
-      <summary>Size of the image widget in pixels</summary>
-      <description>Controls the width and height of the desktop image widget.</description>
+    
+    <key name="widgets-config" type="s">
+      <default>'[{"id": "widget-default", "widget-size": 200, "widget-aspect-ratio": 1.0, "widget-position-x": 100, "widget-position-y": 100, "image-path": "", "widget-timeout": 60, "widget-corner-radius": 20, "time-last-update": 0, "current-image-path": ""}]'</default>
+      <summary>List of configurations for multiple image widgets (JSON array)</summary>
+      <description>
+        A JSON string containing an array of objects. Each object represents a single desktop image widget and contains the following properties:
+        
+        - id (string): Unique identifier for the widget.
+        - widget-size (int): Size of the image widget in pixels. Controls the width and height of the desktop image widget.
+        - widget-aspect-ratio (double): Aspect ratio of the image widget. Defines the aspect ratio (width to height) of the desktop image widget.
+        - widget-position-x (int): X position of the image widget. Sets the horizontal position of the desktop image widget.
+        - widget-position-y (int): Y position of the image widget. Sets the vertical position of the desktop image widget.
+        - image-path (string): Path to the image file or folder. Specifies the file path of the image to be displayed on the desktop.
+        - widget-timeout (int): Timeout for image updates. Defines the interval in seconds for updating the image displayed on the desktop.
+        - widget-corner-radius (int): Corner radius of the image widget. Sets the corner radius for the desktop image widget, giving it rounded corners.
+        - time-last-update (int): Time of last update of the image.
+        - current-image-path (string): Path to the currently displayed image. Stores the path of the image currently being displayed on the desktop.
+      </description>
     </key>
 
-    <key name="widget-aspect-ratio" type="d">
-      <default>1.0</default>
-      <summary>Aspect ratio of the image widget</summary>
-      <description>Defines the aspect ratio (width to height) of the desktop image widget.</description>
-    </key>
-
-    <key name="widget-position-x" type="i">
-      <default>100</default>
-      <summary>X position of the image widget</summary>
-      <description>Sets the horizontal position of the desktop image widget.</description>
-    </key>
-
-    <key name="widget-position-y" type="i">
-      <default>100</default>
-      <summary>Y position of the image widget</summary>
-      <description>Sets the vertical position of the desktop image widget.</description>
-    </key>
-
-    <key name="image-path" type="s">
-      <default>''</default>
-      <summary>Path to the image file</summary>
-      <description>Specifies the file path of the image to be displayed on the desktop.</description>
-    </key>
-
-    <key name="widget-timeout" type="i">
-      <default>60</default>
-      <summary>Timeout for image updates</summary>
-      <description>Defines the interval in seconds for updating the image displayed on the desktop.</description>
-    </key>
-
-    <key name="widget-corner-radius" type="i">
-      <default>20</default>
-      <summary>Corner radius of the image widget</summary>
-      <description>Sets the corner radius for the desktop image widget, giving it rounded corners.</description>
-    </key>
-
-    <key name="time-last-update" type="i">
-      <default>0</default>
-      <summary>Time of last update of the image</summary>
-    </key>
-
-    <key name="current-image-path" type="s">
-      <default>''</default>
-      <summary>Path to the currently displayed image</summary>
-      <description>Stores the path of the image currently being displayed on the desktop.</description>
-    </key>
   </schema>
 </schemalist>
