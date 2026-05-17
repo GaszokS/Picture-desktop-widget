@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.shell.extensions.Picture-desktop-multiple-widget" path="/org/gnome/shell/extensions/Picture-desktop-multiple-widget/">
+  <schema id="org.gnome.shell.extensions.Picture-desktop-widget" path="/org/gnome/shell/extensions/Picture-desktop-widget/">
     
     <key name="widgets-config" type="s">
       <default>'[{"id": "widget-default", "widget-size": 200, "widget-aspect-ratio": 1.0, "widget-position-x": 100, "widget-position-y": 100, "image-path": "", "widget-timeout": 60, "widget-corner-radius": 20, "time-last-update": 0, "current-image-path": ""}]'</default>
